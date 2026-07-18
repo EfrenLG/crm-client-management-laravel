@@ -1,39 +1,45 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Nuevo cliente') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-<div class="container mt-5">
-    <div class="card p-4">
-        <div class="container mt-5">
+    <div class="py-12">
+        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <form method="POST" action="{{ route('clients.store') }}" class="space-y-6">
+                    @csrf
 
-            <h1>Crear cliente</h1>
+                    <div>
+                        <x-input-label for="name" value="Nombre" />
+                        <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
+                            value="{{ old('name') }}" required autofocus />
+                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    </div>
 
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                @foreach ($errors->all() as $error)
-                <div>{{ $error }}</div>
-                @endforeach
+                    <div>
+                        <x-input-label for="email" value="Email" />
+                        <x-text-input id="email" name="email" type="email" class="mt-1 block w-full"
+                            value="{{ old('email') }}" required />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="phone" value="Teléfono" />
+                        <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full"
+                            value="{{ old('phone') }}" />
+                        <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <x-primary-button>{{ __('Guardar') }}</x-primary-button>
+                        <a href="{{ route('clients.index') }}">
+                            <x-secondary-button type="button">{{ __('Cancelar') }}</x-secondary-button>
+                        </a>
+                    </div>
+                </form>
             </div>
-            @endif
-
-            <form action="/clients" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <input type="text" name="name" class="form-control" placeholder="Nombre">
-                </div>
-
-                <div class="mb-3">
-                    <input type="email" name="email" class="form-control" placeholder="Email">
-                </div>
-
-                <div class="mb-3">
-                    <input type="text" name="phone" class="form-control" placeholder="Teléfono">
-                </div>
-
-                <button class="btn btn-success">Guardar</button>
-            </form>
-
         </div>
     </div>
-</div>
-@endsection
+</x-app-layout>
