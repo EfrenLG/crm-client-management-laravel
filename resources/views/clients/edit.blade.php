@@ -7,6 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+            @if (session('error'))
+                <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3 mb-6">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('clients.update', $client) }}" class="space-y-6">
                     @csrf

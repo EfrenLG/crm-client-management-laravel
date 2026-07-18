@@ -14,6 +14,12 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                     <form method="GET" action="{{ route('clients.index') }}" class="w-full sm:max-w-xs">
@@ -41,25 +47,33 @@
                         <tbody class="divide-y divide-gray-100">
                             @forelse ($clients as $client)
                                 <tr>
-                                    <td class="px-4 py-3 font-medium text-gray-900">{{ $client->name }}</td>
+                                    <td class="px-4 py-3 font-medium text-gray-900">
+                                        <a href="{{ route('clients.show', $client) }}" class="hover:underline">
+                                            {{ $client->name }}
+                                        </a>
+                                    </td>
                                     <td class="px-4 py-3 text-gray-600">{{ $client->email }}</td>
                                     <td class="px-4 py-3 text-gray-600">{{ $client->phone }}</td>
                                     <td class="px-4 py-3">
                                         <div class="flex justify-end gap-2">
-                                            <a href="{{ route('clients.edit', $client) }}">
-                                                <x-secondary-button type="button">
-                                                    {{ __('Editar') }}
-                                                </x-secondary-button>
-                                            </a>
+                                            @can('update', $client)
+                                                <a href="{{ route('clients.edit', $client) }}">
+                                                    <x-secondary-button type="button">
+                                                        {{ __('Editar') }}
+                                                    </x-secondary-button>
+                                                </a>
+                                            @endcan
 
-                                            <form action="{{ route('clients.destroy', $client) }}" method="POST"
-                                                onsubmit="return confirm('¿Eliminar a {{ $client->name }}?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-danger-button>
-                                                    {{ __('Eliminar') }}
-                                                </x-danger-button>
-                                            </form>
+                                            @can('delete', $client)
+                                                <form action="{{ route('clients.destroy', $client) }}" method="POST"
+                                                    onsubmit="return confirm('¿Eliminar a {{ $client->name }}?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <x-danger-button>
+                                                        {{ __('Eliminar') }}
+                                                    </x-danger-button>
+                                                </form>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
